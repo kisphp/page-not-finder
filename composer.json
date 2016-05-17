@@ -4,8 +4,8 @@
   "description": "A tool to detect 404 pages in your application",
   "license": "MIT",
   "minimum-stability": "dev",
-  "require-dev": {
-    "fabpot/php-cs-fixer": "1.9.*"
+  "require": {
+    "guzzle/http": "3.9.*"
   },
   "autoload": {
     "psr-0": {
