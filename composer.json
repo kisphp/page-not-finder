@@ -1,5 +1,5 @@
 {
-  "name": "kisphp/404-finder",
+  "name": "kisphp/404_finder",
   "type": "application",
   "description": "A tool to automatically detect 404 pages",
   "license": "MIT",
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "kisphp/404-finder": "dev-master"
+    "kisphp/404_finder": "dev-master"
   },
   "require-dev": {
     "fabpot/php-cs-fixer": "1.9.*"
