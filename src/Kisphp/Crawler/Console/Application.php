@@ -30,9 +30,6 @@ class Application extends BaseApplication
         parent::__construct('PHP 404 Detector', Crawler::VERSION);
 
         $this->add(new FindCommand());
-//        $this->add(new FixCommand());
-//        $this->add(new ReadmeCommand());
-//        $this->add(new SelfUpdateCommand());
     }
 
     public function getLongVersion()
