@@ -41,6 +41,7 @@ class Crawler
 
     /**
      * @param $urlToParse
+     *
      * @return mixed
      */
     public static function parseUrl($urlToParse)
@@ -54,6 +55,7 @@ class Crawler
 
     /**
      * @param string $urlToParse
+     *
      * @return string
      */
     public static function getDomainUrl($urlToParse)
@@ -67,7 +69,6 @@ class Crawler
         }
 
         return $url;
-
     }
 
     /**
@@ -88,6 +89,7 @@ class Crawler
 
     /**
      * @param string $pageUrl
+     *
      * @return $this
      */
     public function parse($pageUrl)
@@ -166,6 +168,7 @@ class Crawler
 
     /**
      * @param string $content
+     *
      * @return int
      */
     protected function getError($content)
