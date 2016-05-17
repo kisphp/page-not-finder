@@ -55,7 +55,9 @@ class Crawler
             return;
         }
 
-        dump($pageUrl);
+        if (strpos($pageUrl, '/') === 0) {
+            $pageUrl = $this->domain . $pageUrl;
+        }
 
         try {
             $resp = $this->client->get($pageUrl)->send();
@@ -96,9 +98,7 @@ class Crawler
         preg_match_all('/href="(.*)"/U', $content->getMessage(), $urlsFound);
         if (count($urlsFound) > 0) {
             foreach ($urlsFound[1] as $url) {
-                dump($url);
-                die;
-                //$this->parse($url);
+                $this->parse($url);
             }
         }
     }
