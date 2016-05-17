@@ -4,15 +4,6 @@
   "description": "A tool to detect 404 pages in your application",
   "license": "MIT",
   "minimum-stability": "dev",
-  "authors": [
-    {
-      "name": "Marius-Bogdan Rizac",
-      "email": "mariusbogdan83@gmail.com"
-    }
-  ],
-  "require": {
-    "kisphp/page-not-finder": "*"
-  },
   "require-dev": {
     "fabpot/php-cs-fixer": "1.9.*"
   },
