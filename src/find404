@@ -30,14 +30,16 @@ set_error_handler(function ($severity, $message, $file, $line) {
     }
 });
 
+$autoload = __DIR__ . '/../../../autoload.php';
+
 // installed via composer?
-if (file_exists($autoload = __DIR__ . '/../../autoload.php')) {
+if (file_exists($autoload)) {
     require_once $autoload;
 } else {
     require_once __DIR__ . '/vendor/autoload.php';
 }
 
-use Symfony\CS\Console\Application;
+use Kisphp\Crawler\Console\Application;
 
 $application = new Application();
 $application->run();
