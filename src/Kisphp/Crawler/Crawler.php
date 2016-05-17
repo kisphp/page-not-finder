@@ -26,12 +26,48 @@ class Crawler
     protected $urls = [];
 
     /**
+     * @var array
+     */
+    protected $errorUrls = [];
+
+    /**
      * @param string $basicDomain
      */
     public function __construct($basicDomain)
     {
         $this->client = new Client();
         $this->domain = $basicDomain;
+    }
+
+    /**
+     * @param $urlToParse
+     * @return mixed
+     */
+    public static function parseUrl($urlToParse)
+    {
+        $domainUrl = self::getDomainUrl($urlToParse);
+
+        $crawler = new self($domainUrl);
+
+        return $crawler->parse($urlToParse);
+    }
+
+    /**
+     * @param string $urlToParse
+     * @return string
+     */
+    public static function getDomainUrl($urlToParse)
+    {
+        $data = parse_url($urlToParse);
+
+        $url = $data['scheme'] . '://' . $data['host'];
+
+        if (isset($data['port'])) {
+            $url .= ':' . $data['port'];
+        }
+
+        return $url;
+
     }
 
     /**
@@ -43,16 +79,25 @@ class Crawler
     }
 
     /**
+     * @return array
+     */
+    public function getErrorUrls()
+    {
+        return $this->errorUrls;
+    }
+
+    /**
      * @param string $pageUrl
+     * @return $this
      */
     public function parse($pageUrl)
     {
         if (array_key_exists($pageUrl, $this->urls)) {
-            return;
+            return $this;
         }
 
         if (!$this->isValidUrl($pageUrl)) {
-            return;
+            return $this;
         }
 
         if (strpos($pageUrl, '/') === 0) {
@@ -61,10 +106,26 @@ class Crawler
 
         try {
             $resp = $this->client->get($pageUrl)->send();
-            $this->urls[$pageUrl] = $resp->getStatusCode();
+            $this->setPageUrl($pageUrl, $resp->getStatusCode());
             $this->getSubpages($resp);
         } catch (ClientErrorResponseException $e) {
-            $this->urls[$pageUrl] = $this->getError($e->getMessage());
+            $this->setPageUrl($pageUrl, $this->getError($e->getMessage()), true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $url
+     * @param int $statusCode
+     */
+    protected function setPageUrl($url, $statusCode, $isErrorUrl = false)
+    {
+        $pageUrl = str_replace($this->domain, '', $url);
+
+        $this->urls[$pageUrl] = $statusCode;
+        if ($isErrorUrl === true) {
+            $this->errorUrls[$pageUrl] = $statusCode;
         }
     }
 
