@@ -1,7 +1,7 @@
 {
   "name": "kisphp/page-not-finder",
   "type": "application",
-  "description": "A tool to automatically detect 404 pages",
+  "description": "A tool to detect 404 pages in your application",
   "license": "MIT",
   "minimum-stability": "dev",
   "authors": [
@@ -11,7 +11,7 @@
     }
   ],
   "require": {
-    "kisphp/page-no-finder": "*"
+    "kisphp/page-not-finder": "*"
   },
   "require-dev": {
     "fabpot/php-cs-fixer": "1.9.*"
