@@ -13,8 +13,13 @@
     "symfony/var-dumper": "3.0.*"
   },
   "autoload": {
-    "psr-0": {
-      "": "src/"
+    "psr-4": {
+      "Kisphp\\": "src/Kisphp/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Finder\\": "tests/Finder/"
     }
   },
   "bin": ["src/page-not-finder"]

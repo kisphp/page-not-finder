@@ -5,7 +5,7 @@ namespace Kisphp\Crawler;
 use Guzzle\Http\Client;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CrawlerFactory
+abstract class CrawlerFactory
 {
     /**
      * @return Crawler
@@ -18,7 +18,7 @@ class CrawlerFactory
     }
 
     /**
-     * @return ClientInterface
+     * @return Client
      */
     protected static function createClient()
     {
