@@ -95,6 +95,46 @@ class Crawler
     }
 
     /**
+     * @return bool
+     */
+    public function hasErrorUrls()
+    {
+        return (bool) count($this->errorUrls);
+    }
+
+    /**
+     * @param string $pageUrl
+     *
+     * @return $this
+     */
+    public function parse($pageUrl)
+    {
+        $pageUrl = $this->fixPageUrl($pageUrl);
+
+        if (array_key_exists($pageUrl, $this->urls)) {
+            return $this;
+        }
+
+        if (!$this->isValidUrl($pageUrl)) {
+            return $this;
+        }
+
+        if (empty(trim($pageUrl))) {
+            return $this;
+        }
+
+        try {
+            $resp = $this->client->get($pageUrl)->send();
+            $this->setPageUrl($pageUrl, $resp->getStatusCode());
+            $this->getSubpages($resp);
+        } catch (ClientErrorResponseException $e) {
+            $this->setPageUrl($pageUrl, $this->getError($e->getMessage()), true);
+        }
+
+        return $this;
+    }
+
+    /**
      * @param string $pageUrl
      *
      * @return string
@@ -109,58 +149,17 @@ class Crawler
     }
 
     /**
-     * @param string $pageUrl
-     *
-     * @return $this
-     */
-    public function parse($pageUrl)
-    {
-        $pageUrl = $this->fixPageUrl($pageUrl);
-
-//        dump($pageUrl);
-        if (array_key_exists($pageUrl, $this->urls)) {
-//            dump($pageUrl . ' exists');
-            return $this;
-        }
-
-        if (!$this->isValidUrl($pageUrl)) {
-//            dump($pageUrl . ' is not valid');
-            return $this;
-        }
-
-        if (empty(trim($pageUrl))) {
-//            dump('url is empty');
-            return $this;
-        }
-
-//        dump('try: ' . $pageUrl);
-//        dump($this->urls);
-
-        try {
-//            dump('is ok');
-            $resp = $this->client->get($pageUrl)->send();
-            $this->setPageUrl($pageUrl, $resp->getStatusCode());
-            $this->getSubpages($resp);
-        } catch (ClientErrorResponseException $e) {
-            $this->setPageUrl($pageUrl, $this->getError($e->getMessage()), true);
-        }
-
-        return $this;
-    }
-
-    /**
      * @param string $url
      * @param int $statusCode
      */
     protected function setPageUrl($url, $statusCode, $isErrorUrl = false)
     {
-//        $pageUrl = str_replace($this->domain, '', $url);
         $pageUrl = $url;
 
         $this->showCrawledPage($pageUrl, $statusCode);
 
         $this->urls[$pageUrl] = $statusCode;
-        if ($isErrorUrl === true) {
+        if ($isErrorUrl) {
             $this->errorUrls[$pageUrl] = $statusCode;
         }
     }
@@ -175,11 +174,14 @@ class Crawler
             return;
         }
 
-        $message = $statusCode . ' --> ' . $pageUrl;
-        if ($statusCode !== 200) {
-            $message = '<error>' . $message . '</error>';
+        if ($this->output->getVerbosity() > 32) {
+            $message = $statusCode . ' --> ' . $pageUrl;
+            if ($statusCode !== 200) {
+                $message = '<error>' . $message . '</error>';
+            }
+            $this->output->writeln($message);
         }
-        $this->output->writeln($message);
+
     }
 
     /**
@@ -212,12 +214,7 @@ class Crawler
         preg_match_all('/href="(.*)"/U', $content->getMessage(), $urlsFound);
         if (count($urlsFound) > 0) {
             foreach ($urlsFound[1] as $url) {
-//                dump('---------');
-//                dump($url);
-//                dump($this->domain);
                 $this->parse($url);
-//                dump($this->urls);
-//                dump('+++++++++');
             }
         }
     }
