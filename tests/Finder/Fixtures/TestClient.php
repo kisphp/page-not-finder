@@ -8,7 +8,14 @@ class TestClient extends Client
 {
     public function send($requests)
     {
-        return new ResponseTest(200);
+        $responseCode = 200;
+        $url = $requests->getPath();
+
+        if (strpos($url, 'error') === 0) {
+            $responseCode = preg_replace('', '', $url);
+        }
+
+        return new ResponseTest($responseCode);
     }
 
 }

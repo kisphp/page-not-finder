@@ -30,7 +30,20 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $crawler->parse('http://localhost/');
 
-        $this->assertEquals(3, count($crawler->getUrls()));
+//        dump($crawler->getUrls());
+//        dump($crawler->getErrorUrls());
+
+        $this->assertEquals(4, count($crawler->getUrls()));
         $this->assertFalse($crawler->hasErrorUrls());
+    }
+
+    public function test_with_error_pages()
+    {
+        $crawler = $this->createCrawler();
+
+        $crawler->parse('http://localhost/');
+
+        dump($crawler->getUrls());
+        dump($crawler->getErrorUrls());
     }
 }
