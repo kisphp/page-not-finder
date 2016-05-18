@@ -5,6 +5,7 @@ namespace Kisphp\Crawler;
 use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\Response;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Crawler
 {
@@ -31,12 +32,18 @@ class Crawler
     protected $errorUrls = [];
 
     /**
+     * @var OutputInterface
+     */
+    protected $output;
+
+    /**
      * @param string $basicDomain
      */
-    public function __construct($basicDomain)
+    public function __construct($basicDomain, OutputInterface $output = null)
     {
         $this->client = new Client();
         $this->domain = $basicDomain;
+        $this->output = $output;
     }
 
     /**
@@ -44,11 +51,11 @@ class Crawler
      *
      * @return mixed
      */
-    public static function parseUrl($urlToParse)
+    public static function parseUrl($urlToParse, OutputInterface $output)
     {
         $domainUrl = self::getDomainUrl($urlToParse);
 
-        $crawler = new self($domainUrl);
+        $crawler = new self($domainUrl, $output);
 
         return $crawler->parse($urlToParse);
     }
@@ -90,23 +97,47 @@ class Crawler
     /**
      * @param string $pageUrl
      *
-     * @return $this
+     * @return string
      */
-    public function parse($pageUrl)
+    protected function fixPageUrl($pageUrl)
     {
-        if (array_key_exists($pageUrl, $this->urls)) {
-            return $this;
-        }
-
-        if (!$this->isValidUrl($pageUrl)) {
-            return $this;
-        }
-
         if (strpos($pageUrl, '/') === 0) {
             $pageUrl = $this->domain . $pageUrl;
         }
 
+        return $pageUrl;
+    }
+
+    /**
+     * @param string $pageUrl
+     *
+     * @return $this
+     */
+    public function parse($pageUrl)
+    {
+        $pageUrl = $this->fixPageUrl($pageUrl);
+
+//        dump($pageUrl);
+        if (array_key_exists($pageUrl, $this->urls)) {
+//            dump($pageUrl . ' exists');
+            return $this;
+        }
+
+        if (!$this->isValidUrl($pageUrl)) {
+//            dump($pageUrl . ' is not valid');
+            return $this;
+        }
+
+        if (empty(trim($pageUrl))) {
+//            dump('url is empty');
+            return $this;
+        }
+
+//        dump('try: ' . $pageUrl);
+//        dump($this->urls);
+
         try {
+//            dump('is ok');
             $resp = $this->client->get($pageUrl)->send();
             $this->setPageUrl($pageUrl, $resp->getStatusCode());
             $this->getSubpages($resp);
@@ -123,12 +154,32 @@ class Crawler
      */
     protected function setPageUrl($url, $statusCode, $isErrorUrl = false)
     {
-        $pageUrl = str_replace($this->domain, '', $url);
+//        $pageUrl = str_replace($this->domain, '', $url);
+        $pageUrl = $url;
+
+        $this->showCrawledPage($pageUrl, $statusCode);
 
         $this->urls[$pageUrl] = $statusCode;
         if ($isErrorUrl === true) {
             $this->errorUrls[$pageUrl] = $statusCode;
         }
+    }
+
+    /**
+     * @param string $pageUrl
+     * @param int $statusCode
+     */
+    protected function showCrawledPage($pageUrl, $statusCode)
+    {
+        if ($this->output === null) {
+            return;
+        }
+
+        $message = $statusCode . ' --> ' . $pageUrl;
+        if ($statusCode !== 200) {
+            $message = '<error>' . $message . '</error>';
+        }
+        $this->output->writeln($message);
     }
 
     /**
@@ -161,7 +212,12 @@ class Crawler
         preg_match_all('/href="(.*)"/U', $content->getMessage(), $urlsFound);
         if (count($urlsFound) > 0) {
             foreach ($urlsFound[1] as $url) {
+//                dump('---------');
+//                dump($url);
+//                dump($this->domain);
                 $this->parse($url);
+//                dump($this->urls);
+//                dump('+++++++++');
             }
         }
     }

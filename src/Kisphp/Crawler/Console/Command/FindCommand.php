@@ -28,10 +28,10 @@ class FindCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $url = 'http://spryker.github.io/core/bundles/oms/state-machine';
-//        $url = 'http://spryker.github.io/user-interface/twig/syntax/';
+        $url = 'http://spryker.github.io/user-interface/twig/syntax/';
 //        $url = 'http://localhost:8000';
 
-        $crawler = Crawler::parseUrl($url);
+        $crawler = Crawler::parseUrl($url, $output);
 
         dump($crawler->getErrorUrls());
     }
