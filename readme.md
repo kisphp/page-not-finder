@@ -11,7 +11,7 @@
 
 ## Requirements
 
-To run this tool you need to have at least PHP 5.3.6 and curl
+To run this tool you need to have at least PHP 5.5.9 and curl
 
 ## Installation
 
