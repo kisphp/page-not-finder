@@ -7,6 +7,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Output implements OutputInterface
 {
+    /**
+     * @var int
+     */
+    protected $verbosity = 32;
+
     public function write($messages, $newline = false, $options = 0)
     {
         // TODO: Implement write() method.
@@ -19,12 +24,12 @@ class Output implements OutputInterface
 
     public function setVerbosity($level)
     {
-        // TODO: Implement setVerbosity() method.
+        $this->verbosity = $level;
     }
 
     public function getVerbosity()
     {
-        return 32;
+        return $this->verbosity;
     }
 
     public function isQuiet()

@@ -13,6 +13,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     public function createCrawler()
     {
         $output = new Output();
+        $output->setVerbosity(64);
 
         return TestCrawlerFactory::createCrawler($output);
     }
@@ -41,7 +42,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     {
         $crawler = $this->createCrawler();
 
-        $crawler->parse('http://localhost/');
+        $crawler->parse('http://localhost:8000/');
 
         dump($crawler->getUrls());
         dump($crawler->getErrorUrls());
