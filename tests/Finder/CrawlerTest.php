@@ -44,7 +44,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $crawler->parse('http://localhost:8000/');
 
-        dump($crawler->getUrls());
-        dump($crawler->getErrorUrls());
+//        dump($crawler->getUrls());
+//        dump($crawler->getErrorUrls());
     }
 }
