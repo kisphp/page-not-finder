@@ -21,7 +21,7 @@ use Symfony\Component\Console\Application as BaseApplication;
 class Application extends BaseApplication
 {
     /**
-     * Constructor.
+     * Constructor
      */
     public function __construct()
     {
@@ -32,6 +32,9 @@ class Application extends BaseApplication
         $this->add(new FindCommand());
     }
 
+    /**
+     * @return string
+     */
     public function getLongVersion()
     {
         $version = parent::getLongVersion() . ' by <comment>Marius-Bogdan Rizac</comment>';

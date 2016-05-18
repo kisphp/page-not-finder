@@ -11,14 +11,18 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class FindCommand extends Command
 {
+    const COMMAND_NAME = 'find';
+
+    const ARGUMENT_URL = 'url';
+
     /**
-     * Configure
+     * Configure command
      */
     protected function configure()
     {
-        $this->setName('find')
+        $this->setName(self::COMMAND_NAME)
             ->setDescription(Crawler::COMMAND_DESCRIPTION)
-            ->addArgument('url', InputArgument::REQUIRED, 'Public url to test')
+            ->addArgument(self::ARGUMENT_URL, InputArgument::REQUIRED, 'Public url to test')
         ;
     }
 
@@ -30,10 +34,10 @@ class FindCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $url = $input->getArgument('url');
+        $url = $input->getArgument(self::ARGUMENT_URL);
 
-        $crawler = CrawlerFactory::createCrawler();
-//        $crawler = Crawler::parseUrl($url, $output);
+        $crawler = CrawlerFactory::createCrawler($output);
+        $crawler->parse($url);
 
         $output->writeln(' ');
         if (!$crawler->hasErrorUrls()) {
