@@ -40,8 +40,11 @@ class FindCommand extends Command
 
             return;
         }
-        $output->writeln('<fg=red>Errors found</>');
-        foreach ($crawler->getErrorUrls() as $url => $error) {
+
+        $errorsFound = $crawler->getErrorUrls();
+
+        $output->writeln('<fg=red>' . count($errorsFound) . ' Errors found</>');
+        foreach ($errorsFound as $url => $error) {
             $output->writeln($url . ' => ' . $error);
         }
         $output->writeln(' ');
