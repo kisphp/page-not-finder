@@ -181,7 +181,6 @@ class Crawler
             }
             $this->output->writeln($message);
         }
-
     }
 
     /**
