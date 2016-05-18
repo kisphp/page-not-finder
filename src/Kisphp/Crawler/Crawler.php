@@ -3,6 +3,7 @@
 namespace Kisphp\Crawler;
 
 use Guzzle\Http\Client;
+use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Guzzle\Http\Message\Response;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,11 +38,13 @@ class Crawler
     protected $output;
 
     /**
+     * @param ClientInterface $clientInterface
      * @param string $basicDomain
+     * @param OutputInterface|null $output
      */
-    public function __construct($basicDomain, OutputInterface $output = null)
+    public function __construct(ClientInterface $clientInterface, $basicDomain, OutputInterface $output = null)
     {
-        $this->client = new Client();
+        $this->client = $clientInterface;
         $this->domain = $basicDomain;
         $this->output = $output;
     }

@@ -27,7 +27,7 @@ class Application extends BaseApplication
     {
         error_reporting(-1);
 
-        parent::__construct('PHP 404 Detector', Crawler::VERSION);
+        parent::__construct('PHP Error Ppages Detector', Crawler::VERSION);
 
         $this->add(new FindCommand());
     }
