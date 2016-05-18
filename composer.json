@@ -17,5 +17,5 @@
       "": "src/"
     }
   },
-  "bin": ["src/find404"]
+  "bin": ["src/page-not-finder"]
 }
