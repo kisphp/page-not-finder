@@ -1,13 +1,25 @@
 <?php
 
+namespace Finder;
+
+use Finder\Fixtures\Output;
 use Kisphp\Crawler\CrawlerFactory;
 
-class CrawlerTest extends PHPUnit_Framework_TestCase
+class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_static_initialize()
+    /**
+     * @return \Kisphp\Crawler\Crawler
+     */
+    public function createCrawler()
     {
-//        $crawler = \Kisphp\Crawler\Crawler::parseUrl('http://www.example.com');
-        $crawler = CrawlerFactory::createCrawler();
+        $output = new Output();
+
+        return CrawlerFactory::createCrawler($output);
+    }
+
+    public function test_initialize()
+    {
+        $crawler = $this->createCrawler();
 
         $this->assertInstanceOf(\Kisphp\Crawler\Crawler::class, $crawler);
     }
