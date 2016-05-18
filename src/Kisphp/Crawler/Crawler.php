@@ -107,6 +107,7 @@ class Crawler
 
     /**
      * @param string $pageUrl
+     *
      * @return $this
      */
     protected function parseUrl($pageUrl)
