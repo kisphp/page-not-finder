@@ -2,8 +2,8 @@
 
 namespace Finder;
 
+use Finder\Fixtures\TestCrawlerFactory;
 use Finder\Fixtures\Output;
-use Kisphp\Crawler\CrawlerFactory;
 
 class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     {
         $output = new Output();
 
-        return CrawlerFactory::createCrawler($output);
+        return TestCrawlerFactory::createCrawler($output);
     }
 
     public function test_initialize()
@@ -22,5 +22,15 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $crawler = $this->createCrawler();
 
         $this->assertInstanceOf(\Kisphp\Crawler\Crawler::class, $crawler);
+    }
+
+    public function test_example()
+    {
+        $crawler = $this->createCrawler();
+
+        $crawler->parse('http://localhost/');
+
+        $this->assertEquals(3, count($crawler->getUrls()));
+        $this->assertFalse($crawler->hasErrorUrls());
     }
 }

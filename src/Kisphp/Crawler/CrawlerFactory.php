@@ -12,7 +12,7 @@ abstract class CrawlerFactory
      */
     public static function createCrawler(OutputInterface $outputInterface)
     {
-        $client = self::createClient();
+        $client = static::createClient();
 
         return new Crawler($client, $outputInterface);
     }
