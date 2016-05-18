@@ -11,9 +11,9 @@ install:
 script:
   - phpunit --coverage-clover=coverage.xml
   - vendor/bin/php-cs-fixer fix --dry-run
-  - php ./src/page-not-finder
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+  - php src/page-not-finder
 
 ## Run on container environment
 sudo: false
