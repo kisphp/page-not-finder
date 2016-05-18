@@ -3,6 +3,7 @@
 namespace Kisphp\Crawler\Console\Command;
 
 use Kisphp\Crawler\Crawler;
+use Kisphp\Crawler\CrawlerFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +17,7 @@ class FindCommand extends Command
     protected function configure()
     {
         $this->setName('find')
-            ->setDescription('Find 404 pages')
+            ->setDescription(Crawler::COMMAND_DESCRIPTION)
             ->addArgument('url', InputArgument::REQUIRED, 'Public url to test')
         ;
     }
@@ -31,7 +32,8 @@ class FindCommand extends Command
     {
         $url = $input->getArgument('url');
 
-        $crawler = Crawler::parseUrl($url, $output);
+        $crawler = CrawlerFactory::createCrawler();
+//        $crawler = Crawler::parseUrl($url, $output);
 
         $output->writeln(' ');
         if (!$crawler->hasErrorUrls()) {

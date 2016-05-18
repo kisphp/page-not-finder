@@ -10,17 +10,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Crawler
 {
-    const VERSION = '0.1.0';
+    const VERSION = '1.0.0';
+
+    const DESCRIPTION = 'PHP Error Pages Detector';
+
+    const COMMAND_DESCRIPTION = 'Find error pages in your web application';
 
     /**
      * @var
      */
     protected $domain;
-
-    /**
-     * @var Client
-     */
-    protected $client;
 
     /**
      * @var array
@@ -33,34 +32,23 @@ class Crawler
     protected $errorUrls = [];
 
     /**
+     * @var Client
+     */
+    protected $client;
+
+    /**
      * @var OutputInterface
      */
     protected $output;
 
     /**
      * @param ClientInterface $clientInterface
-     * @param string $basicDomain
      * @param OutputInterface|null $output
      */
-    public function __construct(ClientInterface $clientInterface, $basicDomain, OutputInterface $output = null)
+    public function __construct(ClientInterface $clientInterface, OutputInterface $output = null)
     {
         $this->client = $clientInterface;
-        $this->domain = $basicDomain;
         $this->output = $output;
-    }
-
-    /**
-     * @param $urlToParse
-     *
-     * @return mixed
-     */
-    public static function parseUrl($urlToParse, OutputInterface $output = null)
-    {
-        $domainUrl = self::getDomainUrl($urlToParse);
-
-        $crawler = new self($domainUrl, $output);
-
-        return $crawler->parse($urlToParse);
     }
 
     /**
@@ -111,6 +99,17 @@ class Crawler
      * @return $this
      */
     public function parse($pageUrl)
+    {
+        $this->domain = $this->getDomainUrl($pageUrl);
+
+        return $this->parseUrl($pageUrl);
+    }
+
+    /**
+     * @param string $pageUrl
+     * @return $this
+     */
+    protected function parseUrl($pageUrl)
     {
         $pageUrl = $this->fixPageUrl($pageUrl);
 
@@ -216,7 +215,7 @@ class Crawler
         preg_match_all('/href="(.*)"/U', $content->getMessage(), $urlsFound);
         if (count($urlsFound) > 0) {
             foreach ($urlsFound[1] as $url) {
-                $this->parse($url);
+                $this->parseUrl($url);
             }
         }
     }
