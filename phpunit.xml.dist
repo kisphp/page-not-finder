@@ -23,6 +23,7 @@
     <testsuites>
         <testsuite name="core">
             <directory>tests/*</directory>
+            <exclude>tests/Finder/Fixtures/*</exclude>
         </testsuite>
     </testsuites>
     <filter>

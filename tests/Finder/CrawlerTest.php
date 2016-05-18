@@ -1,12 +1,50 @@
 <?php
 
+namespace Finder;
 
-class CrawlerTest extends PHPUnit_Framework_TestCase
+use Finder\Fixtures\TestCrawlerFactory;
+use Finder\Fixtures\Output;
+
+class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
-    public function test_static_initialize()
+    /**
+     * @return \Kisphp\Crawler\Crawler
+     */
+    public function createCrawler()
     {
-        $crawler = \Kisphp\Crawler\Crawler::parseUrl('http://www.example.com');
+        $output = new Output();
+        $output->setVerbosity(64);
+
+        return TestCrawlerFactory::createCrawler($output);
+    }
+
+    public function test_initialize()
+    {
+        $crawler = $this->createCrawler();
 
         $this->assertInstanceOf(\Kisphp\Crawler\Crawler::class, $crawler);
+    }
+
+    public function test_example()
+    {
+        $crawler = $this->createCrawler();
+
+        $crawler->parse('http://localhost/');
+
+//        dump($crawler->getUrls());
+//        dump($crawler->getErrorUrls());
+
+        $this->assertEquals(4, count($crawler->getUrls()));
+        $this->assertFalse($crawler->hasErrorUrls());
+    }
+
+    public function test_with_error_pages()
+    {
+        $crawler = $this->createCrawler();
+
+        $crawler->parse('http://localhost:8000/');
+
+//        dump($crawler->getUrls());
+//        dump($crawler->getErrorUrls());
     }
 }

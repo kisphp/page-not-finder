@@ -26,11 +26,11 @@ composer require kisphp/page-not-finder --dev
 To test your web applicaiton run:
 
 ```php
-vendor/bin/find404 find http://www.example.com
+vendor/bin/page-not-finder find http://www.example.com
 ```
 
 To enable verbose mode, append `-v` to the command
 
 ```php
-vendor/bin/find404 find http://www.example.com -v
+vendor/bin/page-not-finder find http://www.example.com -v
 ```

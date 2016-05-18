@@ -21,17 +21,20 @@ use Symfony\Component\Console\Application as BaseApplication;
 class Application extends BaseApplication
 {
     /**
-     * Constructor.
+     * Constructor
      */
     public function __construct()
     {
         error_reporting(-1);
 
-        parent::__construct('PHP 404 Detector', Crawler::VERSION);
+        parent::__construct(Crawler::DESCRIPTION, Crawler::VERSION);
 
         $this->add(new FindCommand());
     }
 
+    /**
+     * @return string
+     */
     public function getLongVersion()
     {
         $version = parent::getLongVersion() . ' by <comment>Marius-Bogdan Rizac</comment>';
