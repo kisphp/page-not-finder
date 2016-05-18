@@ -51,7 +51,7 @@ class Crawler
      *
      * @return mixed
      */
-    public static function parseUrl($urlToParse, OutputInterface $output)
+    public static function parseUrl($urlToParse, OutputInterface $output = null)
     {
         $domainUrl = self::getDomainUrl($urlToParse);
 
