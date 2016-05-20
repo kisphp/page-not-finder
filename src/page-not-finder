@@ -10,7 +10,7 @@
  * with this source code in the file LICENSE.
  */
 
-ini_set('xdebug.max_nesting_level', 0);
+ini_set('xdebug.max_nesting_level', -1);
 
 /**
  * @author Marius-Bogdan Rizac <mariusbogdan83@gmail.com>
