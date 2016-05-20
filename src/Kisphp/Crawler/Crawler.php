@@ -2,10 +2,10 @@
 
 namespace Kisphp\Crawler;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\ClientErrorResponseException;
-use Guzzle\Http\Message\Response;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Crawler
@@ -127,11 +127,13 @@ class Crawler
         }
 
         try {
-            $resp = $this->client->get($pageUrl)->send();
-            $this->setPageUrl($pageUrl, $resp->getStatusCode());
+            $resp = $this->client->request('GET', $pageUrl);
+            $responseCode = $resp->getStatusCode();
+            $this->setPageUrl($pageUrl, $responseCode);
             $this->getSubpages($resp);
-        } catch (ClientErrorResponseException $e) {
-            $this->setPageUrl($pageUrl, $this->getError($e->getMessage()), true);
+        } catch (ClientException $e) {
+            $responseCode = $e->getCode();
+            $this->setPageUrl($pageUrl, $responseCode, true);
         }
 
         return $this;
@@ -201,6 +203,10 @@ class Crawler
             return false;
         }
 
+        if (preg_match('/(javascript:void|js:void)/', $url)) {
+            return false;
+        }
+
         if (strpos($url, $this->domain) === false && strpos($url, '/') !== 0) {
             return false;
         }
@@ -213,23 +219,14 @@ class Crawler
      */
     protected function getSubpages(Response $content)
     {
-        preg_match_all('/href="(.*)"/U', $content->getMessage(), $urlsFound);
+        preg_match_all('/href="(.*)"/U', $content->getBody(), $urlsFound);
         if (count($urlsFound) > 0) {
             foreach ($urlsFound[1] as $url) {
+                if (empty($url)) {
+                    continue;
+                }
                 $this->parseUrl($url);
             }
         }
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return int
-     */
-    protected function getError($content)
-    {
-        $lines = explode("\n", $content);
-
-        return (int) preg_replace('/([^0-9]+)/', '', $lines[1]);
     }
 }
