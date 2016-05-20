@@ -2,13 +2,15 @@
 <?php
 
 /*
- * This file is part of the PHP CS utility.
+ * This file is part of the PHP 404 Detector utility.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Marius-Bogdan Rizac <mariusbogdan83@gmail.com>
  *
  * This source file is subject to the MIT license that is bundled
  * with this source code in the file LICENSE.
  */
+
+ini_set('xdebug.max_nesting_level', 0);
 
 /**
  * @author Marius-Bogdan Rizac <mariusbogdan83@gmail.com>

@@ -2,6 +2,15 @@
 
 namespace Kisphp\Crawler;
 
+/*
+ * This file is part of the PHP 404 Detector utility.
+ *
+ * (c) Marius-Bogdan Rizac <mariusbogdan83@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
