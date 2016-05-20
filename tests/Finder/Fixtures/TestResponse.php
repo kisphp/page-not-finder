@@ -2,11 +2,11 @@
 
 namespace Finder\Fixtures;
 
-use Guzzle\Http\Message\Response;
+use GuzzleHttp\Psr7\Response;
 
-class ResponseTest extends Response
+class TestResponse extends Response
 {
-    public function getMessage()
+    public function getBody()
     {
         return <<<HTML
 <a href="/">homepage</a>
@@ -14,9 +14,11 @@ class ResponseTest extends Response
 <a href="javascript:void(0)"></a>
 <a href="css/style.css"></a>
 <a href="/services"></a>
+<a href="/services"></a>
 <a href="#services"></a>
 <a href="mailto:test@example.com"></a>
 <a href="/error-404"></a>
+<a href="/error-500"></a>
 <a href="http://localhost:8000/test"></a>
 <a href="http://www.google.com"></a>
 HTML;

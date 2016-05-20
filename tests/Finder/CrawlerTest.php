@@ -31,11 +31,10 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $crawler->parse('http://localhost/');
 
-//        dump($crawler->getUrls());
-//        dump($crawler->getErrorUrls());
+        $this->assertEquals(5, count($crawler->getUrls()));
+        $this->assertTrue($crawler->hasErrorUrls());
 
-        $this->assertEquals(4, count($crawler->getUrls()));
-        $this->assertFalse($crawler->hasErrorUrls());
+        $this->assertEquals(2, count($crawler->getErrorUrls()));
     }
 
     public function test_with_error_pages()
@@ -44,7 +43,15 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $crawler->parse('http://localhost:8000/');
 
-//        dump($crawler->getUrls());
-//        dump($crawler->getErrorUrls());
+        $this->assertEquals(5, count($crawler->getUrls()));
+    }
+
+    public function test_with_error_404_pages()
+    {
+        $crawler = $this->createCrawler();
+
+        $crawler->parse('http://localhost/error-404');
+
+        $this->assertEquals(1, count($crawler->getUrls()));
     }
 }

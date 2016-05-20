@@ -2,25 +2,26 @@
 
 namespace Finder\Fixtures;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Exception\ClientErrorResponseException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
 
 class TestClient extends Client
 {
-    /**
-     * @param array|\Guzzle\Http\Message\RequestInterface $requests
-     * @return ResponseTest
-     */
-    public function send($requests)
+    public function request($method, $uri = null, array $options = [])
     {
         $responseCode = 200;
-        $url = $requests->getPath();
 
-        if (strpos($url, 'error') === 0) {
-            $responseCode = preg_replace('', '', $url);
-            throw new ClientErrorResponseException('error ' . $responseCode, $responseCode);
+        if (preg_match('/error/', $uri)) {
+            $responseCode = preg_replace('/([^0-9]+)/', '', $uri);
+            $request = new Request($method, $uri);
+            $response = new Response($responseCode);
+
+            throw new ClientException('error ' . $responseCode, $request, $response);
         }
 
-        return new ResponseTest($responseCode);
+        return new TestResponse($responseCode);
     }
 }
