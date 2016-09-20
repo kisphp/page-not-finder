@@ -54,7 +54,7 @@ class Crawler
      * @param ClientInterface $clientInterface
      * @param OutputInterface|null $output
      */
-    public function __construct(ClientInterface $clientInterface, OutputInterface $output = null)
+    public function __construct(ClientInterface $clientInterface, OutputInterface $output)
     {
         $this->client = $clientInterface;
         $this->output = $output;
@@ -131,10 +131,6 @@ class Crawler
             return $this;
         }
 
-        if (empty(trim($pageUrl))) {
-            return $this;
-        }
-
         try {
             $resp = $this->client->request('GET', $pageUrl);
             $responseCode = $resp->getStatusCode();
@@ -184,10 +180,6 @@ class Crawler
      */
     protected function showCrawledPage($pageUrl, $statusCode)
     {
-        if ($this->output === null) {
-            return;
-        }
-
         if ($this->output->getVerbosity() > 32) {
             $message = $statusCode . ' --> ' . $pageUrl;
             if ($statusCode !== 200) {

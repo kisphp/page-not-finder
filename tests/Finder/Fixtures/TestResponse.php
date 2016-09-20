@@ -11,6 +11,7 @@ class TestResponse extends Response
         return <<<HTML
 <a href="/">homepage</a>
 <a href=""></a>
+<a href=" ">dummy</a>
 <a href="javascript:void(0)"></a>
 <a href="css/style.css"></a>
 <a href="/services"></a>
