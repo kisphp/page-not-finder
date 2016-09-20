@@ -20,9 +20,8 @@ use Symfony\Component\Console\Application as BaseApplication;
  */
 class Application extends BaseApplication
 {
-    /**
-     * Constructor
-     */
+    const AUTHOR = 'Marius-Bogdan Rizac';
+
     public function __construct()
     {
         error_reporting(-1);
@@ -37,6 +36,10 @@ class Application extends BaseApplication
      */
     public function getLongVersion()
     {
-        return parent::getLongVersion() . ' by <comment>Marius-Bogdan Rizac</comment>';
+        return sprintf(
+            '%s by <comment>%s</comment>',
+            parent::getLongVersion(),
+            self::AUTHOR
+        );
     }
 }

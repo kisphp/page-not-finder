@@ -19,14 +19,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class Crawler
 {
-    const VERSION = '1.0.0';
+    const VERSION = '1.0.1';
 
     const DESCRIPTION = 'PHP Error Pages Detector';
 
     const COMMAND_DESCRIPTION = 'Find error pages in your web application';
 
     /**
-     * @var
+     * @var string
      */
     protected $domain;
 
