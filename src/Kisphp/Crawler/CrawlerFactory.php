@@ -22,6 +22,8 @@ abstract class CrawlerFactory
      */
     protected static function createClient()
     {
-        return new Client();
+        return new Client([
+            'verify' => false,
+        ]);
     }
 }
