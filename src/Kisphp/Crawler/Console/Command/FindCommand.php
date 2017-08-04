@@ -2,8 +2,6 @@
 
 namespace Kisphp\Crawler\Console\Command;
 
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
 use Kisphp\Crawler\Crawler;
 use Kisphp\Crawler\CrawlerFactory;
 use Symfony\Component\Console\Command\Command;
