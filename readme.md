@@ -34,3 +34,10 @@ To enable verbose mode, append `-v` to the command
 ```php
 vendor/bin/page-not-finder find http://www.example.com -v
 ```
+
+To skip urls, add more paths in `CrawlerFactory::addSkipPaths` method:
+
+```php
+$crawler->skipPath('logout');
+$crawler->skipPath('dependency');
+```

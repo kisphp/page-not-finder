@@ -161,8 +161,17 @@ class Crawler
         $this->skipPaths[] = $path;
     }
 
+    /**
+     * @param string $pageUrl
+     *
+     * @return bool
+     */
     protected function urlDefinedAsSkipped($pageUrl)
     {
+        if (count($this->skipPaths) === 0) {
+            return true;
+        }
+
         $matcher = '#(' . implode('|', $this->skipPaths) . ')#';
 
         return (bool) preg_match($matcher, $pageUrl);

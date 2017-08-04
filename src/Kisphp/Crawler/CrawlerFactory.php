@@ -26,10 +26,7 @@ abstract class CrawlerFactory
      */
     protected static function addSkipPaths(Crawler $crawler)
     {
-        $crawler->skipPath('logout');
-        $crawler->skipPath('password-reset');
-        $crawler->skipPath('check-bundle');
-        $crawler->skipPath('dependency');
+        //$crawler->skipPath('logout');
     }
 
     /**
