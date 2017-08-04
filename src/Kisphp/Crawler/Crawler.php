@@ -13,7 +13,7 @@ namespace Kisphp\Crawler;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Crawler
@@ -139,6 +139,8 @@ class Crawler
             return $this;
         }
 
+        dump($this->client);die;
+
         try {
             $resp = $this->client->request('GET', $pageUrl);
 
@@ -249,9 +251,9 @@ class Crawler
     }
 
     /**
-     * @param Response $content
+     * @param ResponseInterface $content
      */
-    protected function getSubpages(Response $content)
+    protected function getSubpages(ResponseInterface $content)
     {
         preg_match_all('/href="(.*)"/U', $content->getBody(), $urlsFound);
         if (count($urlsFound) === 0) {

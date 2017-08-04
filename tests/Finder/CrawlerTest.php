@@ -5,6 +5,7 @@ namespace Finder;
 use Finder\Fixtures\TestCrawlerFactory;
 use Finder\Fixtures\Output;
 use Kisphp\Crawler\Crawler;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class CrawlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,7 +15,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
     public function createCrawler()
     {
         $output = new Output();
-        $output->setVerbosity(64);
+        $output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
 
         return TestCrawlerFactory::createCrawler($output);
     }

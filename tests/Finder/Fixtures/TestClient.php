@@ -6,10 +6,16 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
 
 class TestClient extends Client
 {
+    /**
+     * @param string $method
+     * @param null $uri
+     * @param array $options
+     *
+     * @return TestResponse
+     */
     public function request($method, $uri = null, array $options = [])
     {
         $responseCode = 200;
