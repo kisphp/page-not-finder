@@ -35,9 +35,11 @@ To enable verbose mode, append `-v` to the command
 vendor/bin/page-not-finder find http://www.example.com -v
 ```
 
-To skip urls, add more paths in `CrawlerFactory::addSkipPaths` method:
+To skip urls, create a `.page-not-finder.yml` file in your project's root directory and add paths:
 
 ```php
-$crawler->skipPath('logout');
-$crawler->skipPath('dependency');
+skipPaths:
+  - logout
+  - development
 ```
+All urls containing those paths will be skipped from crawling

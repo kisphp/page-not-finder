@@ -33,11 +33,13 @@ abstract class CrawlerFactory
             return;
         }
 
-        $config = self::parseYmlFile($pathToYamlFile);
+        $config = self::parseYamlFile($pathToYamlFile);
 
-        dump($config);die;
-
-        //$crawler->skipPath('logout');
+        if (array_key_exists('skipPaths', $config)) {
+            foreach ($config['skipPaths'] as $skipPath){
+                $crawler->skipPath($skipPath);
+            }
+        }
     }
 
     /**
@@ -50,7 +52,12 @@ abstract class CrawlerFactory
         ]);
     }
 
-    protected static function parseYmlFile($pathToFile)
+    /**
+     * @param string $pathToFile
+     *
+     * @return array
+     */
+    protected static function parseYamlFile($pathToFile)
     {
         return Yaml::parse(file_get_contents($pathToFile));
     }
