@@ -3,6 +3,7 @@
 namespace Kisphp\Crawler\Console\Command;
 
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use Kisphp\Crawler\Crawler;
 use Kisphp\Crawler\CrawlerFactory;
 use Symfony\Component\Console\Command\Command;
@@ -34,10 +35,11 @@ class FindCommand extends Command
     {
         $url = $input->getArgument(self::ARGUMENT_URL);
 
+        /** @var Crawler $crawler */
         $crawler = CrawlerFactory::createCrawler($output);
         try {
             $crawler->parse($url);
-        } catch (RequestException $e) {
+        } catch (\Exception $e) {
             $output->writeln('<fg=red>' . $e->getMessage() . '</>');
         }
 

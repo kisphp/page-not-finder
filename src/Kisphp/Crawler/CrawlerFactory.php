@@ -14,7 +14,22 @@ abstract class CrawlerFactory
     {
         $client = static::createClient();
 
-        return new Crawler($client, $outputInterface);
+        $crawler = new Crawler($client, $outputInterface);
+
+        static::addSkipPaths($crawler);
+
+        return $crawler;
+    }
+
+    /**
+     * @param Crawler $crawler
+     */
+    protected static function addSkipPaths(Crawler $crawler)
+    {
+        $crawler->skipPath('logout');
+        $crawler->skipPath('password-reset');
+        $crawler->skipPath('check-bundle');
+        $crawler->skipPath('dependency');
     }
 
     /**

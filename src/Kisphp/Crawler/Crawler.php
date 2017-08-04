@@ -13,7 +13,11 @@ namespace Kisphp\Crawler;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Cookie\CookieJar;
+use GuzzleHttp\Cookie\CookieJarInterface;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -49,6 +53,11 @@ class Crawler
      * @var OutputInterface
      */
     protected $output;
+
+    /**
+     * @var array
+     */
+    protected $skipPaths = [];
 
     /**
      * @param ClientInterface $clientInterface
@@ -109,7 +118,7 @@ class Crawler
      */
     public function parse($pageUrl)
     {
-        $this->domain = $this->getDomainUrl($pageUrl);
+        $this->domain = static::getDomainUrl($pageUrl);
 
         return $this->parseUrl($pageUrl);
     }
@@ -127,21 +136,41 @@ class Crawler
             return $this;
         }
 
+        if ($this->urlDefinedAsSkipped($pageUrl)) {
+            return $this;
+        }
+
         if (!$this->isValidUrl($pageUrl)) {
             return $this;
         }
 
         try {
             $resp = $this->client->request('GET', $pageUrl);
+
             $responseCode = $resp->getStatusCode();
             $this->setPageUrl($pageUrl, $responseCode);
             $this->getSubpages($resp);
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
             $responseCode = $e->getCode();
             $this->setPageUrl($pageUrl, $responseCode, true);
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function skipPath($path)
+    {
+        $this->skipPaths[] = $path;
+    }
+
+    protected function urlDefinedAsSkipped($pageUrl)
+    {
+        $matcher = '#(' . implode('|', $this->skipPaths) . ')#';
+
+        return (bool) preg_match($matcher, $pageUrl);
     }
 
     /**
@@ -221,13 +250,14 @@ class Crawler
     protected function getSubpages(Response $content)
     {
         preg_match_all('/href="(.*)"/U', $content->getBody(), $urlsFound);
-        if (count($urlsFound) > 0) {
-            foreach ($urlsFound[1] as $url) {
-                if (empty($url)) {
-                    continue;
-                }
-                $this->parseUrl($url);
+        if (count($urlsFound) === 0) {
+            return;
+        }
+        foreach ($urlsFound[1] as $url) {
+            if (empty($url)) {
+                continue;
             }
+            $this->parseUrl($url);
         }
     }
 }
