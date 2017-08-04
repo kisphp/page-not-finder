@@ -139,8 +139,6 @@ class Crawler
             return $this;
         }
 
-        dump($this->client);die;
-
         try {
             $resp = $this->client->request('GET', $pageUrl);
 
@@ -171,7 +169,7 @@ class Crawler
     protected function urlDefinedAsSkipped($pageUrl)
     {
         if (count($this->skipPaths) === 0) {
-            return true;
+            return false;
         }
 
         $matcher = '#(' . implode('|', $this->skipPaths) . ')#';
